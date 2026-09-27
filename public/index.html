@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HackChat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<header class="topbar">
+  <div class="logo"><span class="logo-mark">&gt;_</span> HACK<span>CHAT</span></div>
+  <div class="top-right">
+    <div class="me-pill" id="mePill">
+      <img id="meAvatar" src="" alt="" />
+      <div><div id="meName">...</div><div id="meHost" class="mono dim">...</div></div>
+      <div class="me-bal"><span id="meBalance">0</span><small>$</small></div>
+    </div>
+    <div class="rank-badge" id="meRank">rookie</div>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- LEFT : CHAT -->
+  <section class="panel chat-panel">
+    <div class="panel-head">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="tabs-mini">LIVE_CHAT <span class="pulse"></span></div>
+      <div class="online" id="onlineCount">0 online</div>
+    </div>
+
+    <div class="chat-body" id="chatView">
+      <div id="messages" class="messages"></div>
+      <!-- profile overlay inside chat tab -->
+      <div id="profilePane" class="profile-pane hidden">
+        <button class="back-btn" id="profileBack">← back to chat</button>
+        <div class="profile-card">
+          <img id="pfAvatar" src="" alt="" />
+          <h2 id="pfName">—</h2>
+          <div class="pf-rank" id="pfRank">rookie</div>
+          <div class="pf-grid mono">
+            <div><label>HOST</label><span id="pfHost">—</span></div>
+            <div><label>BALANCE</label><span id="pfBalance">—</span></div>
+            <div><label>HACKS</label><span id="pfHacks">—</span></div>
+            <div><label>MINING</label><span id="pfMining">—</span></div>
+          </div>
+          <div id="pfSelf" class="hidden">
+            <div class="edit-row">
+              <input id="editName" maxlength="24" placeholder="new display name" />
+              <button id="saveName">save name</button>
+            </div>
+            <div class="edit-row">
+              <input id="avatarUrl" placeholder="avatar image url (or upload)" />
+              <button id="saveAvatar">set</button>
+            </div>
+            <div class="edit-row">
+              <label class="file-btn">upload avatar<input type="file" id="avatarFile" accept="image/*" hidden /></label>
+              <label class="file-btn">upload server key<input type="file" id="noop" hidden disabled /></label>
+            </div>
+            <div class="self-host mono" id="selfHostBox"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <button id="myProfileBtn" title="my profile">👤</button>
+      <input id="msgInput" maxlength="1000" placeholder="message the grid..." autocomplete="off" />
+      <label class="img-btn" title="send photo">📷<input type="file" id="imgInput" accept="image/*" hidden /></label>
+      <button id="sendBtn">SEND</button>
+    </div>
+  </section>
+
+  <!-- RIGHT : TERMINAL -->
+  <section class="panel term-panel">
+    <div class="panel-head">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="tabs-mini">ROOT_TERMINAL</div>
+      <div class="term-hint mono">type <b>help</b></div>
+    </div>
+    <div id="term" class="term"></div>
+    <div class="term-input-row">
+      <span class="prompt">➜</span>
+      <input id="termInput" autocomplete="off" spellcheck="false" placeholder="type a command..." />
+    </div>
+  </section>
+</main>
+
+<!-- ONBOARDING -->
+<div id="onboard" class="modal-wrap hidden">
+  <div class="modal">
+    <div class="modal-logo">&gt;_ HACKCHAT</div>
+    <h1>Enter the grid</h1>
+    <p class="dim">Your account is saved on this device forever. No logins. First set your identity + a <b>server password</b> that protects your mining servers.</p>
+    <label>display name</label>
+    <input id="obName" maxlength="24" placeholder="e.g. zero_cool" />
+    <label>server password <small>(letters=weak, +symbols / +numbers = stronger & slower to hack)</small></label>
+    <input id="obPass" maxlength="64" placeholder="e.g. moon42!light" type="password" />
+    <button id="obGo">INITIALIZE →</button>
+  </div>
+</div>
+
+<!-- ADMIN FLOATING MENU (white & blue) -->
+<div id="adminWrap" class="admin-wrap hidden">
+  <div class="admin-card">
+    <div class="admin-head">
+      <div><b>DATABASE</b> <span>control deck</span></div>
+      <button id="adminClose">✕ close</button>
+    </div>
+    <div class="admin-sub">All users on this HackChat instance. View / set balance. Ban wipes their device account on next open.</div>
+    <div id="adminList" class="admin-list"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
