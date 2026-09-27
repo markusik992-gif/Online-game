@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: hackchat
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/ping
+    # NOTE (free plan): no persistent disk available.
+    # Without MONGODB_URI: memory + data.json while awake, device backup
+    # auto-restores accounts after sleep/redeploy, chat caches on device.
+    # With MONGODB_URI (free Atlas M0): fully permanent + tamper-proof.
+    envVars:
+      - key: MONGODB_URI
+        sync: false
